@@ -6,16 +6,9 @@ import com.davidfandino.digital_signature_api.exception.UserNotFoundException;
 import com.davidfandino.digital_signature_api.model.User;
 import com.davidfandino.digital_signature_api.model.UserKeys;
 import com.davidfandino.digital_signature_api.repository.UserRepository;
-import com.davidfandino.digital_signature_api.utils.EncryptionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.Date;
 import java.util.UUID;
 
 @Service

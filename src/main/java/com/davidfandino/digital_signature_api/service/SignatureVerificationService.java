@@ -28,7 +28,7 @@ public class SignatureVerificationService {
         User user = userService.getUserByNif(verifySignatureDto.getNif());
 
         // 2. Obtener las claves del usuario
-        UserKeys userKeys = userKeysRepository.findByUserUUID(user.getUserUUID())
+        UserKeys userKeys = userKeysRepository.findByUser(user)
                 .orElseThrow(() -> new UserKeysNotFoundException("No se encontraron claves para el usuario con NIF: " + verifySignatureDto.getNif()));
 
         // 3. Obtener la clave pública del usuario (en formato base64)

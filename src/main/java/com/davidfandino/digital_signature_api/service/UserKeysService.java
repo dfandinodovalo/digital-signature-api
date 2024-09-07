@@ -35,7 +35,7 @@ public class UserKeysService {
         try {
             User user = userService.getUserByNif(nif);
 
-            if (userKeysRepository.existsByUserUUID(user.getUserUUID())) {
+            if (userKeysRepository.existsByUser(user)) {
                 throw new UserKeysAlreadyGeneratedException("User with NIF: " + nif + " already has keys generated.");
             }
 
@@ -49,7 +49,7 @@ public class UserKeysService {
             SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), EncryptionUtil.ALGORITHM);
             String encryptedPrivateKey = EncryptionUtil.encrypt(privateKey, secretKeySpec);
 
-            UserKeys userKeys = new UserKeys(UUID.randomUUID(), user.getUserUUID(), publicKey, encryptedPrivateKey, user);
+            UserKeys userKeys = new UserKeys(UUID.randomUUID(), publicKey, encryptedPrivateKey, user);
             userKeysRepository.save(userKeys);
 
         } catch (UserNotFoundException e) {

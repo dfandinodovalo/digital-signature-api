@@ -38,7 +38,7 @@ public class SignService {
         }
 
         // 2. Obtener las claves del usuario
-        UserKeys userKeys = userKeysRepository.findByUserUUID(user.getUserUUID())
+        UserKeys userKeys = userKeysRepository.findByUser(user)
                 .orElseThrow(() -> new UserKeysNotFoundException("No se encontraron claves para el usuario con NIF: " + signDocumentDto.getNif()));
 
         // 3. Desencriptar la clave privada

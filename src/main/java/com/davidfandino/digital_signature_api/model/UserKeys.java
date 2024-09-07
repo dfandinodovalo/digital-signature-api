@@ -12,8 +12,8 @@ import java.util.UUID;
 public @Data class UserKeys {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID userKeyUUID;
-    private UUID userUUID;
 
     @Lob
     private String publicKey;
