@@ -24,7 +24,7 @@ public class UserKeysService {
     private final UserService userService;
 
     @Value("${app.secret-key}")
-    private String secretKey;
+    public String secretKey;
 
     public UserKeysService(UserKeysRepository userKeysRepository, UserService userService) throws Exception {
         this.userKeysRepository = userKeysRepository;
