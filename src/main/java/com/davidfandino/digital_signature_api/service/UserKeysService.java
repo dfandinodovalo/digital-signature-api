@@ -31,7 +31,7 @@ public class UserKeysService {
         this.userService = userService;
     }
 
-    public void generateKeys(String nif) throws Exception {
+    public UserKeys generateKeys(String nif) throws Exception {
         try {
             User user = userService.getUserByNif(nif);
 
@@ -50,7 +50,7 @@ public class UserKeysService {
             String encryptedPrivateKey = EncryptionUtil.encrypt(privateKey, secretKeySpec);
 
             UserKeys userKeys = new UserKeys(UUID.randomUUID(), publicKey, encryptedPrivateKey, user);
-            userKeysRepository.save(userKeys);
+            return userKeysRepository.save(userKeys);
 
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException("User not found with NIF: " + nif);
