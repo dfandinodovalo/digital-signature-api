@@ -113,7 +113,7 @@ public class SignServiceTest {
     }
 
     @Test
-    public void signDocument_FailureToDecryptPrivateKey() throws Exception {
+    public void signDocument_FailureToDecryptPrivateKey() {
         when(userService.getUserByNif(user.getNif())).thenReturn(user);
         when(userKeysRepository.findByUser(user)).thenReturn(Optional.of(userKeys));
 
@@ -124,25 +124,6 @@ public class SignServiceTest {
 
         verify(userService, times(1)).getUserByNif(user.getNif());
         verify(userKeysRepository, times(1)).findByUser(user);
-    }
-
-
-    private static class KeyGeneratorUtil {
-
-        public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-            keyPairGen.initialize(2048);
-            return keyPairGen.generateKeyPair();
-        }
-
-        public static String getPrivateKeyBase64(PrivateKey privateKey) {
-            return Base64.getEncoder().encodeToString(privateKey.getEncoded());
-        }
-
-        public static String getPublicKeyBase64(PublicKey publicKey) {
-            return Base64.getEncoder().encodeToString(publicKey.getEncoded());
-        }
-
     }
 
 }
