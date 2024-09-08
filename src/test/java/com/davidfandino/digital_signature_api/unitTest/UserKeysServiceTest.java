@@ -1,4 +1,4 @@
-package com.davidfandino.digital_signature_api;
+package com.davidfandino.digital_signature_api.unitTest;
 
 import com.davidfandino.digital_signature_api.exception.UserKeysAlreadyGeneratedException;
 import com.davidfandino.digital_signature_api.exception.UserNotFoundException;
@@ -7,6 +7,7 @@ import com.davidfandino.digital_signature_api.model.UserKeys;
 import com.davidfandino.digital_signature_api.repository.UserKeysRepository;
 import com.davidfandino.digital_signature_api.service.UserKeysService;
 import com.davidfandino.digital_signature_api.service.UserService;
+import com.davidfandino.digital_signature_api.utils.EncryptionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,9 @@ public class UserKeysServiceTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private EncryptionUtil encryptionUtil;  // Simular EncryptionUtil
+
     @InjectMocks
     private UserKeysService userKeysService;
 
@@ -50,6 +54,7 @@ public class UserKeysServiceTest {
     public void generateKeys_Success() throws Exception {
         when(userService.getUserByNif(user.getNif())).thenReturn(user);
         when(userKeysRepository.existsByUser(user)).thenReturn(false);
+        when(encryptionUtil.encrypt(anyString(), any())).thenReturn("encryptedPrivateKey");
         when(userKeysRepository.save(any(UserKeys.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 

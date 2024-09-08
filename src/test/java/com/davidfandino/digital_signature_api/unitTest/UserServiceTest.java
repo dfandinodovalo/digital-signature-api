@@ -1,4 +1,4 @@
-package com.davidfandino.digital_signature_api;
+package com.davidfandino.digital_signature_api.unitTest;
 
 import com.davidfandino.digital_signature_api.dto.UserDto;
 import com.davidfandino.digital_signature_api.exception.UserAlreadyExistsException;
