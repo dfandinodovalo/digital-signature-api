@@ -21,10 +21,14 @@ public class SignController {
         try {
             String signatureBase64 = signService.signDocument(signDocumentDto);
             return ResponseEntity.ok(signatureBase64);
-        } catch (UserNotFoundException | UserKeysNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with nif "
+                    + signDocumentDto.getNif() +" not found.");
+        } catch (UserKeysNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User keys with nif "
+                    + signDocumentDto.getNif() + " have not been found");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al firmar el documento.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error when signing the document.");
         }
     }
 

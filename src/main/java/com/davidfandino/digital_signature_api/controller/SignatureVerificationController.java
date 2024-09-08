@@ -25,14 +25,18 @@ public class SignatureVerificationController {
             boolean isSignatureValid = signatureVerificationService.verifySignature(verifySignatureDto);
 
             if (isSignatureValid) {
-                return ResponseEntity.ok("La firma es válida.");
+                return ResponseEntity.ok().build();
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La firma no es válida.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The signature is not valid.");
             }
-        } catch (UserNotFoundException | UserKeysNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with nif "
+                    + verifySignatureDto.getNif() +" not found.");
+        } catch (UserKeysNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User keys with nif "
+                    + verifySignatureDto.getNif() + " have not been found");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al verificar la firma.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error verifying signature. Error: " +e.getMessage());
         }
     }
 }
