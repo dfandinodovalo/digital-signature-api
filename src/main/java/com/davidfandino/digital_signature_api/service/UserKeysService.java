@@ -1,6 +1,5 @@
 package com.davidfandino.digital_signature_api.service;
 
-import com.davidfandino.digital_signature_api.exception.UserAlreadyExistsException;
 import com.davidfandino.digital_signature_api.exception.UserKeysAlreadyGeneratedException;
 import com.davidfandino.digital_signature_api.exception.UserNotFoundException;
 import com.davidfandino.digital_signature_api.model.User;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
