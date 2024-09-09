@@ -1,8 +1,12 @@
 # Digital Signature API Project
 
+[[ES]](https://github.com/dfandinodovalo/digital-signature-api/tree/develop/language/README_ES.md) README.md version in Spanish.
+
+
+
 ## Description
 
-This project implements a simple **REST API** using **Spring Boot 3.3.3** for user creation, digital signature key generation, document signing, and signature verification. The API allows users to digitally sign documents and verify the validity of those signatures using **Java cryptography**.
+This project implements a simple **REST API** using **Spring Boot 3.3.3** for user creation, digital signature key generation, document signing, and signature verification. The API allows users to digitally sign documents and verify the validity of those signatures using the **Java cryptography** library. The project uses an in-memory database with **H2** to store user information and keys, ensuring data persistence during runtime.
 
 ## System Requirements
 
