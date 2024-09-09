@@ -20,15 +20,10 @@ public class SignatureVerificationController {
     private SignatureVerificationService signatureVerificationService;
 
     @PostMapping("/verify")
-    public ResponseEntity<String> verifySignature(@RequestBody VerifySignatureDto verifySignatureDto) {
+    public ResponseEntity<?> verifySignature(@RequestBody VerifySignatureDto verifySignatureDto) {
         try {
             boolean isSignatureValid = signatureVerificationService.verifySignature(verifySignatureDto);
-
-            if (isSignatureValid) {
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The signature is not valid.");
-            }
+            return ResponseEntity.ok(isSignatureValid);
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with nif "
                     + verifySignatureDto.getNif() +" not found.");

@@ -16,10 +16,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
 import java.util.Base64;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,11 +53,16 @@ public class VerifySignatureTest {
         VerifySignatureDto verifySignatureDto = signValidDocument();
         String verifySignatureJson = new ObjectMapper().writeValueAsString(verifySignatureDto);
 
-        mockMvc.perform(post("/api/signature/verify")
+        MvcResult result = mockMvc.perform(post("/api/signature/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(verifySignatureJson))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.notNullValue()));
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        boolean isSignatureValid = new ObjectMapper().readValue(content, Boolean.class);
+
+        assertTrue(isSignatureValid);
     }
 
     @Test
@@ -93,11 +100,16 @@ public class VerifySignatureTest {
 
         String verifySignatureJson = new ObjectMapper().writeValueAsString(verifySignatureDto);
 
-        mockMvc.perform(post("/api/signature/verify")
+        MvcResult result = mockMvc.perform(post("/api/signature/verify")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(verifySignatureJson))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("The signature is not valid.")); // Verifica el mensaje de error
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        boolean isSignatureValid = new ObjectMapper().readValue(content, Boolean.class);
+
+        assertFalse(isSignatureValid);
     }
 
     @Test
