@@ -5,11 +5,15 @@ import com.davidfandino.digital_signature_api.exception.UserAlreadyExistsExcepti
 import com.davidfandino.digital_signature_api.exception.UserNotFoundException;
 import com.davidfandino.digital_signature_api.model.User;
 import com.davidfandino.digital_signature_api.model.UserKeys;
+import com.davidfandino.digital_signature_api.model.dto.UserDTO;
+import com.davidfandino.digital_signature_api.model.dto.UserKeysDTO;
 import com.davidfandino.digital_signature_api.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -39,6 +43,28 @@ public class UserService {
 
     public User getUserByNif(String nif) throws UserNotFoundException {
         return userRepository.getUserByNif(nif).orElseThrow(() -> new UserNotFoundException("User with NIF " + nif + " not found."));
+    }
+
+
+    public List<UserDTO> getUsers() {
+        return userRepository.findAll().stream().map(user -> {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setFirstName(user.getFirstName());
+            userDTO.setLastName(user.getLastName());
+            userDTO.setNif(user.getNif());
+            userDTO.setUserUUID(user.getUserUUID());
+            userDTO.setCreationDate(user.getCreationDate());
+
+            UserKeys userKeys = user.getUserKeys();
+            if (userKeys != null) {
+                UserKeysDTO dto = new UserKeysDTO();
+                dto.setPublicKey(userKeys.getPublicKey());
+                dto.setUserKeyUUID(userKeys.getUserKeyUUID());
+                userDTO.setUserKeys(dto);
+            }
+            return userDTO;
+        }).collect(Collectors.toList());
+
     }
 
     public Boolean existUserWithNif(String nif) {

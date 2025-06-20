@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -20,6 +21,15 @@ public class UserController {
         try {
             userService.createUser(userDto);
             return ResponseEntity.ok(userDto);
+        } catch (UserAlreadyExistsException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> list() {
+        try {
+            return ResponseEntity.ok(userService.getUsers());
         } catch (UserAlreadyExistsException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }

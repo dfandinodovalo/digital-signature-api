@@ -1,4 +1,5 @@
 package com.davidfandino.digital_signature_api.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,8 @@ public @Data class UserKeys {
     @Lob
     private String privateKey;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name = "user_uuid", nullable = false)
     private User user;
 }
