@@ -19,10 +19,10 @@ public class UserKeysController {
     }
 
     @PostMapping("/generate-keys/{nif}")
-    public ResponseEntity<String> generateKeys(@PathVariable String nif) {
+    public ResponseEntity<?> generateKeys(@PathVariable String nif) {
         try {
             userKeysService.generateKeys(nif);
-            return ResponseEntity.ok("Keys generated for user: " + nif);
+            return ResponseEntity.ok().build();
         }   catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (UserKeysAlreadyGeneratedException e) {
