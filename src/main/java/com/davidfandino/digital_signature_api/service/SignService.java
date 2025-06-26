@@ -1,6 +1,7 @@
 package com.davidfandino.digital_signature_api.service;
 
 import com.davidfandino.digital_signature_api.dto.SignDocumentDto;
+import com.davidfandino.digital_signature_api.dto.SignDto;
 import com.davidfandino.digital_signature_api.exception.*;
 import com.davidfandino.digital_signature_api.model.User;
 import com.davidfandino.digital_signature_api.model.UserKeys;
@@ -32,7 +33,7 @@ public class SignService {
     @Value("${app.secret-key}")
     public String secretKey;
 
-    public String signDocument(SignDocumentDto signDocumentDto) throws Exception {
+    public SignDto signDocument(SignDocumentDto signDocumentDto) throws Exception {
         try {
             User user = userService.getUserByNif(signDocumentDto.getNif());
             if (user == null) {
@@ -50,7 +51,10 @@ public class SignService {
             PrivateKey privateKey = getPrivateKeyFromString(decryptedPrivateKey);
             byte[] signatureBytes = signData(documentBytes, privateKey);
 
-            return Base64.getEncoder().encodeToString(signatureBytes);
+            SignDto signDto = new SignDto();
+            signDto.setSignatureBase64(Base64.getEncoder().encodeToString(signatureBytes));
+
+            return signDto;
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException(e.getMessage());
         } catch (UserKeysNotFoundException e) {

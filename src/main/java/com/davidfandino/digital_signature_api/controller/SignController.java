@@ -1,6 +1,7 @@
 package com.davidfandino.digital_signature_api.controller;
 
 import com.davidfandino.digital_signature_api.dto.SignDocumentDto;
+import com.davidfandino.digital_signature_api.dto.SignDto;
 import com.davidfandino.digital_signature_api.exception.UserKeysNotFoundException;
 import com.davidfandino.digital_signature_api.exception.UserNotFoundException;
 import com.davidfandino.digital_signature_api.service.SignService;
@@ -18,9 +19,9 @@ public class SignController {
     private SignService signService;
 
     @PostMapping
-    public ResponseEntity<String> signDocument(@RequestBody SignDocumentDto signDocumentDto) {
+    public ResponseEntity<?> signDocument(@RequestBody SignDocumentDto signDocumentDto) {
         try {
-            String signatureBase64 = signService.signDocument(signDocumentDto);
+            SignDto signatureBase64 = signService.signDocument(signDocumentDto);
             return ResponseEntity.ok(signatureBase64);
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with nif "
