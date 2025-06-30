@@ -2,6 +2,8 @@ package com.davidfandino.digital_signature_api.controller;
 
 import com.davidfandino.digital_signature_api.dto.UserDto;
 import com.davidfandino.digital_signature_api.exception.UserAlreadyExistsException;
+import com.davidfandino.digital_signature_api.exception.UserNotFoundException;
+import com.davidfandino.digital_signature_api.model.User;
 import com.davidfandino.digital_signature_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,8 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody UserDto userDto) {
         try {
-            userService.createUser(userDto);
-            return ResponseEntity.ok(userDto);
+            User user = userService.createUser(userDto);
+            return ResponseEntity.ok(user);
         } catch (UserAlreadyExistsException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
@@ -33,6 +35,12 @@ public class UserController {
         } catch (UserAlreadyExistsException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping("/{nif}")
+    public ResponseEntity<?> userExists(@PathVariable String nif) {
+        boolean exists = userService.existUserWithNif(nif.toUpperCase());
+        return ResponseEntity.ok(exists);
     }
 
 }

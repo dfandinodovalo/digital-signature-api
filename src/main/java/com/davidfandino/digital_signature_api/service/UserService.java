@@ -5,8 +5,7 @@ import com.davidfandino.digital_signature_api.exception.UserAlreadyExistsExcepti
 import com.davidfandino.digital_signature_api.exception.UserNotFoundException;
 import com.davidfandino.digital_signature_api.model.User;
 import com.davidfandino.digital_signature_api.model.UserKeys;
-import com.davidfandino.digital_signature_api.model.dto.UserDTO;
-import com.davidfandino.digital_signature_api.model.dto.UserKeysDTO;
+import com.davidfandino.digital_signature_api.dto.UserKeysDTO;
 import com.davidfandino.digital_signature_api.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,21 +23,21 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void createUser(UserDto userDto) throws UserAlreadyExistsException {
+    public User createUser(UserDto UserDto) throws UserAlreadyExistsException {
 
-        if (existUserWithNif(userDto.getNif())) {
-            throw new UserAlreadyExistsException("User with NIF " + userDto.getNif() + " already exists");
+        if (existUserWithNif(UserDto.getNif())) {
+            throw new UserAlreadyExistsException("User with NIF " + UserDto.getNif() + " already exists");
         }
 
         User user = new User();
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setNif(userDto.getNif());
+        user.setFirstName(UserDto.getFirstName());
+        user.setLastName(UserDto.getLastName());
+        user.setNif(UserDto.getNif().toUpperCase());
 
         user.setUserUUID(UUID.randomUUID());
         user.setCreationDate(LocalDateTime.now());
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public User getUserByNif(String nif) throws UserNotFoundException {
@@ -46,23 +45,23 @@ public class UserService {
     }
 
 
-    public List<UserDTO> getUsers() {
+    public List<UserDto> getUsers() {
         return userRepository.findAll().stream().map(user -> {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setFirstName(user.getFirstName());
-            userDTO.setLastName(user.getLastName());
-            userDTO.setNif(user.getNif());
-            userDTO.setUserUUID(user.getUserUUID());
-            userDTO.setCreationDate(user.getCreationDate());
+            UserDto UserDto = new UserDto();
+            UserDto.setFirstName(user.getFirstName());
+            UserDto.setLastName(user.getLastName());
+            UserDto.setNif(user.getNif());
+            UserDto.setUserUUID(user.getUserUUID());
+            UserDto.setCreationDate(user.getCreationDate());
 
             UserKeys userKeys = user.getUserKeys();
             if (userKeys != null) {
                 UserKeysDTO dto = new UserKeysDTO();
                 dto.setPublicKey(userKeys.getPublicKey());
                 dto.setUserKeyUUID(userKeys.getUserKeyUUID());
-                userDTO.setUserKeys(dto);
+                UserDto.setUserKeys(dto);
             }
-            return userDTO;
+            return UserDto;
         }).collect(Collectors.toList());
 
     }

@@ -1,7 +1,4 @@
-package com.davidfandino.digital_signature_api.model.dto;
-import com.davidfandino.digital_signature_api.model.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+package com.davidfandino.digital_signature_api.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
